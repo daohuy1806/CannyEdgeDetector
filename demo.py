@@ -94,8 +94,23 @@ def laneDetection():
                     left_fit.append((slope, intercept))
                 else:
                     right_fit.append((slope, intercept))
-        left_fit_average = np.average(left_fit, axis=0)
-        right_fit_average = np.average(right_fit, axis=0)
+        
+         #Kiểm tra nếu left_fit hoặc right_fit rỗng
+        if len(left_fit) == 0:
+            left_fit_average = None
+        else:
+            left_fit_average = np.average(left_fit, axis=0)
+    
+        if len(right_fit) == 0:
+            right_fit_average = None
+        else:
+            right_fit_average = np.average(right_fit, axis=0)
+    
+    # Xử lý trường hợp left_fit_average hoặc right_fit_average là None
+        if left_fit_average is None or right_fit_average is None:
+        # Trả về một đường thẳng mặc định hoặc None
+            return None
+
         left_line = make_points(image, left_fit_average)
         right_line = make_points(image, right_fit_average)
         averaged_lines = (left_line, right_line)
@@ -103,7 +118,7 @@ def laneDetection():
 
 
     if __name__ == "__main__":
-        cap = cv2.VideoCapture("vd_normal.mp4")  # open video file
+        cap = cv2.VideoCapture("vd_rain.mp4")  # open video file
         while cap.isOpened():
             _, frame = cap.read()  
             canny_image = canny(frame)              
